@@ -4,10 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cars going vroom vroom</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="index.js">
+    </script>
   </head>
   <body>
-    <form>
-      <input type="text" name="search">
-    </form>
+    <div id="totalByEachCompany">
+      <h3>Total manufactured vehichels by company: </h3>
+      <input type="text" name="totalManufacturedInput"/>
+      <button onClick="getTotalManufacturedByEachCompany()">search</button>
+    </div>
+
+    <div id="listOfModels">
+      <h3>List of models by company</h3>
+      <input type="text" name="listOfModelsInput">
+      <button onClick="getModelsByCompany()">search</button>
+    </div>
+
+    <div id="longestDrivingRange">
+      <h3>Car with the longest driving range</h3>
+      <input type="text" name="longestDrivingRangeInput">
+      <button onClick="getModelsByCompany()">search</button>
+    </div>
   </body>
 </html>
