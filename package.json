@@ -1,0 +1,12 @@
+{
+  "name": "assignment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:j0eTheRipper/aplc-assignment.git",
+  "author": "j0eTheRipper <j0etheripper0010@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "serve": "^14.2.5"
+  }
+}
