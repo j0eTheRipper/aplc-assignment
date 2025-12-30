@@ -58,6 +58,14 @@ class Vehicle {
       obj.Warranty_Years,
     );
   }
+
+  manufacturerIs(manufacturer) {
+    return this.manufacturer.toLowerCase() === manufacturer.toLowerCase();
+  }
+
+  ChargingTypeIs(chargingType) {
+    return this.chargingType.toLowerCase() === chargingType.toLowerCase();
+  }
 }
 
 let vehicles = [];
@@ -83,8 +91,7 @@ function getTotalManufacturedByEachCompany() {
 
   let result = 0;
   for (car of vehicles)
-    (car.manufacturer.toLowerCase() === input ||
-      car.model.toLowerCase() === input) &&
+    (car.manufacturerIs(input) || car.model.toLowerCase() === input) &&
       result++;
 
   const resultDiv = ResultLine("totalByEachCompany", resultDivId);
@@ -101,15 +108,59 @@ function getModelsByCompany() {
   const list = ResultList("listOfModels", resultDiv);
 
   for (car of vehicles) {
-    const isRightManufacturer = car.manufacturer.toLowerCase() === input;
     const isNotAdded = !list.innerHTML.includes(car.model);
 
-    if (isRightManufacturer && isNotAdded) {
+    if (car.manufacturerIs(input) && isNotAdded) {
       const element = document.createElement("li");
       element.append(car.model);
       list.appendChild(element);
     }
   }
+}
+
+function getLongestDrivingRange() {
+  const resultDiv = "longestDrivingRangeOut";
+  document.getElementById(resultDiv)?.remove();
+  const input = document
+    .getElementsByName("longestDrivingRangeInput")[0]
+    .value.toLowerCase();
+
+  const resultline = ResultLine("longestDrivingRange", resultDiv);
+
+  let resultModel;
+  for (car of vehicles) {
+    if (car.manufacturerIs(input)) {
+      if (!resultModel) resultModel = car; // if the resultModel variable is empty
+      if (car.range > resultModel.range) resultModel = car;
+    }
+  }
+
+  resultline.append(
+    `Longest range by ${input}: ${resultModel.model} at ${resultModel.range}km`,
+  );
+}
+
+function getAverageChargingTime() {
+  const resultDiv = "averageChargingTimeOut";
+  document.getElementById(resultDiv)?.remove();
+
+  const input = document
+    .getElementsByName("averageChargingTimeInput")[0]
+    .value.toLowerCase();
+
+  const resultline = ResultLine("averageChargingTime", resultDiv);
+
+  let total = 0;
+  let count = 0;
+  for (car of vehicles) {
+    car.ChargingTypeIs(input) && (total += car.chargeTime) && count++;
+  }
+
+  const result = total / count;
+
+  resultline.append(
+    `Average charge time for ${input}: ${result.toFixed(3)} hours`,
+  );
 }
 
 function ResultList(parentId, id) {
