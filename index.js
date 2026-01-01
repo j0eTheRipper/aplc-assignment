@@ -159,8 +159,39 @@ function getAverageChargingTime() {
   const result = total / count;
 
   resultline.append(
-    `Average charge time for ${input}: ${result.toFixed(3)} hours`,
+    `Average charge time with ${input}: ${result.toFixed(3)} hours`,
   );
+}
+
+function getTopFiveBySafteyRating() {
+  const resultDiv = "topFiveBySafteyRatingOut";
+  document.getElementById(resultDiv)?.remove();
+
+  const resultList = ResultList("topFiveBySafteyRating", resultDiv);
+  let topFive = [vehicles[0]];
+
+  for (let i = 0; i < vehicles.length; i++) {
+    for (let j = 0; j < topFive.length; j++) {
+      if (topFive.includes(vehicles[i])) {
+        continue;
+      }
+      if (topFive[j].safetyRating < vehicles[i].safetyRating) {
+        topFive[j] = vehicles[i];
+      }
+      if (topFive.length < 5) {
+        topFive.push(
+          vehicles[j].safetyRating < vehicles[i].safetyRating
+            ? vehicles[j]
+            : vehicles[i],
+        );
+      }
+    }
+  }
+  for (car of topFive) {
+    const element = document.createElement("li");
+    element.append(car.model);
+    resultList.appendChild(element);
+  }
 }
 
 function ResultList(parentId, id) {
