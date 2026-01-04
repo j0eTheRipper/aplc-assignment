@@ -1,9 +1,10 @@
 .resultBox {
-	width: 266px;
-	max-height: 183px;
-	overflow: auto;
-	border-color: black;
-	border-width: 1px;
-	border-style: dashed;
-	margin-top: 10px;
+  width: 266px;
+  max-height: 183px;
+  overflow: auto;
+  border-color: black;
+  border-width: 1px;
+  border-style: dashed;
+  margin-top: 10px;
+  padding: 3px;
 }

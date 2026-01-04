@@ -175,23 +175,32 @@ function getTopFiveBySafteyRating() {
       if (topFive.includes(vehicles[i])) {
         continue;
       }
+      let lesserSafteyRating = vehicles[i];
       if (topFive[j].safetyRating < vehicles[i].safetyRating) {
+        lesserSafteyRating = topFive[j];
         topFive[j] = vehicles[i];
       }
-      if (topFive.length < 5) {
-        topFive.push(
-          vehicles[j].safetyRating < vehicles[i].safetyRating
-            ? vehicles[j]
-            : vehicles[i],
-        );
-      }
+      topFive.length < 5 && topFive.push(lesserSafteyRating);
     }
   }
   for (car of topFive) {
     const element = document.createElement("li");
-    element.append(car.model);
+    element.append(`${car.manufacturer}: ${car.model}`);
     resultList.appendChild(element);
   }
+}
+
+function getBestSelling() {
+  const resultDiv = "bestSellingOut";
+  document.getElementById(resultDiv)?.remove();
+  let result = vehicles[0];
+
+  for (car of vehicles) {
+    car.sales > result.sales && (result = car);
+  }
+
+  const resultLine = ResultLine("bestSellingVehicle", resultDiv);
+  resultLine.append(result.model);
 }
 
 function ResultList(parentId, id) {
