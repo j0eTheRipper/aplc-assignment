@@ -68,14 +68,15 @@ class Vehicle {
   }
 }
 
-let vehicles = [];
+let vehicles = []; // list of vehicles from the json file
 
 async function getData() {
+  // function that fills the vehicles array
   const request = await fetch("data.json");
   const response = await request.json();
 
   for (let i = 0; i < response.length; i++) {
-    vehicles.push(Vehicle.fromJSON(response[i]));
+    vehicles.push(Vehicle.fromJSON(response[i])); // use the factory method in the class to cast the data to the Vehicle type
   }
 }
 
@@ -85,15 +86,19 @@ function getTotalManufacturedByEachCompany() {
   const resultDivId = "totalManufacturedOut";
   document.getElementById(resultDivId)?.remove(); // remove the result <p> if it exists. The ? is a null check
 
+  // get the input and normalize it
   const input = document
     .getElementsByName("totalManufacturedInput")[0]
     .value.toLowerCase();
 
   let result = 0;
-  for (car of vehicles)
-    (car.manufacturerIs(input) || car.model.toLowerCase() === input) &&
-      result++;
 
+  for (car of vehicles)
+    // for each car, check if the manufacturer or the model matches the input
+    (car.manufacturerIs(input) || car.model.toLowerCase() === input) &&
+      result++; // increment if true
+
+  // create the new element containting the result and add it to the page
   const resultDiv = ResultLine("totalByEachCompany", resultDivId);
   resultDiv.append(`number of cars by ${input}: ${result}`);
 }
@@ -101,12 +106,14 @@ function getTotalManufacturedByEachCompany() {
 function getModelsByCompany() {
   const resultDiv = "modlesByCompanyOut";
   document.getElementById(resultDiv)?.remove();
+
   const input = document
     .getElementsByName("listOfModelsInput")[0]
     .value.toLowerCase();
 
   const list = ResultList("listOfModels", resultDiv);
 
+  // loop through the list of vehicles, and add the ones that fit the manufacturer
   for (car of vehicles) {
     const isNotAdded = !list.innerHTML.includes(car.model);
 
@@ -121,6 +128,7 @@ function getModelsByCompany() {
 function getLongestDrivingRange() {
   const resultDiv = "longestDrivingRangeOut";
   document.getElementById(resultDiv)?.remove();
+
   const input = document
     .getElementsByName("longestDrivingRangeInput")[0]
     .value.toLowerCase();
@@ -131,10 +139,11 @@ function getLongestDrivingRange() {
   for (car of vehicles) {
     if (car.manufacturerIs(input)) {
       if (!resultModel) resultModel = car; // if the resultModel variable is empty
-      if (car.range > resultModel.range) resultModel = car;
+      if (car.range > resultModel.range) resultModel = car; // compare and swap if the current car has a longer driving range than the stored car
     }
   }
 
+  // append the result to the document
   resultline.append(
     `Longest range by ${input}: ${resultModel.model} at ${resultModel.range}km`,
   );
@@ -150,16 +159,19 @@ function getAverageChargingTime() {
 
   const resultline = ResultLine("averageChargingTime", resultDiv);
 
-  let total = 0;
+  let totalChargingTime = 0;
   let count = 0;
   for (car of vehicles) {
-    car.ChargingTypeIs(input) && (total += car.chargeTime) && count++;
+    // short circuit: if the charging type matches, add the charging time and increment the count
+    car.ChargingTypeIs(input) &&
+      (totalChargingTime += car.chargeTime) &&
+      count++;
   }
 
-  const result = total / count;
+  const averageChargingTime = totalChargingTime / count;
 
   resultline.append(
-    `Average charge time with ${input}: ${result.toFixed(3)} hours`,
+    `Average charge time with ${input}: ${averageChargingTime.toFixed(3)} hours`,
   );
 }
 
@@ -172,17 +184,22 @@ function getTopFiveBySafteyRating() {
 
   for (let i = 0; i < vehicles.length; i++) {
     for (let j = 0; j < topFive.length; j++) {
-      if (topFive.includes(vehicles[i])) {
-        continue;
-      }
-      let lesserSafteyRating = vehicles[i];
+      if (topFive.includes(vehicles[i])) continue;
+
+      let lesserSafteyRating = vehicles[i]; // assume the current vehicle has the least safety
+
+      // compare the top "j" with the current vehicle
       if (topFive[j].safetyRating < vehicles[i].safetyRating) {
-        lesserSafteyRating = topFive[j];
-        topFive[j] = vehicles[i];
+        lesserSafteyRating = topFive[j]; // change the lesserSafetyRating to fit
+        topFive[j] = vehicles[i]; // swap
       }
+
+      // push the lesserSafety to the end of the array if the array is < 5 elements
       topFive.length < 5 && topFive.push(lesserSafteyRating);
     }
   }
+
+  // add the top five elements to the document
   for (car of topFive) {
     const element = document.createElement("li");
     element.append(`${car.manufacturer}: ${car.model}`);
