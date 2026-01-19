@@ -217,7 +217,7 @@ function getBestSelling() {
   }
 
   const resultLine = ResultLine("bestSellingVehicle", resultDiv);
-  resultLine.append(result.model);
+  resultLine.append(`${result.model} with ${result.unitsSold} units sold`);
 }
 
 function ResultList(parentId, id) {
