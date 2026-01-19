@@ -213,7 +213,7 @@ function getBestSelling() {
   let result = vehicles[0];
 
   for (car of vehicles) {
-    car.sales > result.sales && (result = car);
+    car.unitsSold > result.unitsSold && (result = car);
   }
 
   const resultLine = ResultLine("bestSellingVehicle", resultDiv);
